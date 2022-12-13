@@ -11,11 +11,11 @@ Feature: Dashboard Page Menu
       | All Posts  |
       | My Account |
 
-
+@smoke
   Scenario: Log in as a specific user
     Given The user is on the login page
     When The user logs in using following credentials
-      | username | eurotech@gmail.co |
+      | username | eurotech@gmail.com |
       | password | Test12345!        |
       | message  | Teacher           |
     Then The user should be able to login
