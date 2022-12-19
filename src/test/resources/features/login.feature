@@ -1,4 +1,4 @@
-@Login @smoke @ec2
+@Login @smoke
 Feature: Eurotech log in test
   # Agile story : As a user, I should be able to log in so I can see my account
   Background:
