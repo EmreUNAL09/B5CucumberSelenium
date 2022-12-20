@@ -5,6 +5,7 @@ import com.eurotech.pages.LoginPage;
 import com.eurotech.utilities.BrowserUtils;
 import com.eurotech.utilities.ConfigurationReader;
 import com.eurotech.utilities.Driver;
+import com.eurotech.utilities.ExcelUtil;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,10 +13,16 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import java.util.List;
+import java.util.Map;
+
 public class Login_StepDefs {
 
     LoginPage loginPage = new LoginPage();
     DashboardPage dashboardPage = new DashboardPage();
+
+    ExcelUtil excelUtil = new ExcelUtil("src/test/resources/EurotechTest_B5.xlsx","Test Data");
+    List<Map<String,String>> dataList = excelUtil.getDataList();
 
     @Given("The user is on the login page")
     public void the_user_is_on_the_login_page() {
@@ -78,4 +85,25 @@ public class Login_StepDefs {
 //        System.out.println("validationMessage = " + validationMessage);
 //        Assert.assertEquals(expectedMessage,validationMessage);
     }
+
+    @When("The user enters {string} and row number {int}")
+    public void the_user_enters_and_row_number(String sheetName, Integer rowNumber) {
+
+        //loginPage.login(dataList.get(0).get("Username"),dataList.get(0).get("Password"));
+        loginPage.login(dataList.get(rowNumber).get("Username"),dataList.get(rowNumber).get("Password"));
+    }
+
+    @Then("The welcome message contains in excel {int}")
+    public void the_welcome_message_contains_in_excel(Integer rowNumberForName) {
+        String actualMessage = dashboardPage.welcomeMessage.getText();
+        Assert.assertTrue(actualMessage.contains(dataList.get(rowNumberForName).get("Name")));
+
+    }
+
+    @Then("The user verify that company name {int}")
+    public void the_user_verify_that_company_name(Integer rowNumberForCompany){
+        String actualCompanyName = dashboardPage.getCompany(dataList.get(rowNumberForCompany).get("Company"));
+        Assert.assertEquals(dataList.get(rowNumberForCompany).get("Company"),actualCompanyName);
+    }
+
 }
